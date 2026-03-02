@@ -113,19 +113,8 @@
   <section id="unterwegs" class="section">
     <h2 class="section-title">Unterwegs</h2>
     <p class="section-subtitle">Die nächsten Markttermine</p>
-    <div class="table-wrapper">
-      <table id="markttermine" class="display" style="width:100%">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Datum</th>
-            <th>Von</th>
-            <th>Bis</th>
-            <th>Standort</th>
-            <th>Adresse</th>
-          </tr>
-        </thead>
-      </table>
+    <div class="termine-container" id="termine-container">
+      <p class="termine-loading" id="termine-loading">Termine werden geladen…</p>
     </div>
   </section>
 
@@ -146,21 +135,15 @@
     </div>
   </section>
 
-  <!-- Footer / Impressum -->
+  <!-- Footer -->
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-col">
-        <h4>Impressum</h4>
-        <p>Nadine Kahr<br>Teststraße 123<br>12345 Musterstadt</p>
-      </div>
-      <div class="footer-col">
-        <h4>Technischer Kontakt</h4>
-        <p>Luca Greinecker<br>
-          <a href="mailto:greineckerluca@hotmail.com">greineckerluca@hotmail.com</a>
+        <p>
+          <a href="impressum.html">Impressum</a>
         </p>
       </div>
       <div class="footer-col">
-        <h4>Social</h4>
         <p>
           <a href="https://www.instagram.com/nad.kah_kreativarbeit/" target="_blank" rel="noopener">Instagram</a>
         </p>
@@ -171,29 +154,80 @@
     </div>
   </footer>
 
-  <!-- DataTables for Unterwegs -->
+  <!-- jQuery & DataTables (kept as required dependencies from original integration) -->
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"/>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
   <script>
-    new DataTable('#markttermine', {
-      ajax: 'https://script.google.com/macros/s/AKfycbxpsayHCXRW_PbU4bncQMoXrMRjJBUPdKsBkkF41HJWBxRfwFDga0eX1bzKPrY9R6Ln/exec',
-      columns: [
-        { data: 'Name' },
-        { data: 'Datum' },
-        { data: 'UhrzeitStart' },
-        { data: 'UhrzeitEnde' },
-        { data: 'Standort' },
-        { data: 'Adresse' }
-      ],
-      language: {
-        url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/de-DE.json'
-      },
-      responsive: true,
-      paging: false,
-      searching: false,
-      info: false
-    });
+    (function() {
+      // Format ISO date string to DD.MM.YYYY
+      function formatDate(isoStr) {
+        if (!isoStr) return '–';
+        var d = new Date(isoStr);
+        if (isNaN(d)) return isoStr;
+        var day = String(d.getDate()).padStart(2, '0');
+        var month = String(d.getMonth() + 1).padStart(2, '0');
+        var year = d.getFullYear();
+        // 1899 is the Google Sheets time-only epoch – skip
+        if (year < 1900) return '–';
+        return day + '.' + month + '.' + year;
+      }
+
+      // Extract HH:MM from ISO string (use UTC to avoid timezone shifting the 1899 epoch)
+      function formatTime(isoStr) {
+        if (!isoStr) return '';
+        var d = new Date(isoStr);
+        if (isNaN(d)) return isoStr;
+        var h = String(d.getUTCHours()).padStart(2, '0');
+        var m = String(d.getUTCMinutes()).padStart(2, '0');
+        return h + ':' + m;
+      }
+
+      // Fetch data via jQuery (keeping the dependency as requested)
+      $.ajax({
+        url: 'https://script.google.com/macros/s/AKfycbxpsayHCXRW_PbU4bncQMoXrMRjJBUPdKsBkkF41HJWBxRfwFDga0eX1bzKPrY9R6Ln/exec',
+        dataType: 'json',
+        success: function(json) {
+          var container = document.getElementById('termine-container');
+          var loading = document.getElementById('termine-loading');
+          var rows = json.data || [];
+
+          if (rows.length === 0) {
+            loading.textContent = 'Aktuell sind keine Termine eingetragen.';
+            return;
+          }
+
+          // Sort by date ascending
+          rows.sort(function(a, b) {
+            return new Date(a.Datum) - new Date(b.Datum);
+          });
+
+          var html = '';
+          rows.forEach(function(row) {
+            var datum = formatDate(row.Datum);
+            var zeit = formatTime(row.UhrzeitStart) + ' – ' + formatTime(row.UhrzeitEnde);
+            html += '<div class="termin-card">'
+              + '<div class="termin-date">' + datum + '</div>'
+              + '<div class="termin-details">'
+              + '<h3 class="termin-name">' + (row.Name || '') + '</h3>'
+              + '<p class="termin-meta">'
+              + '<span class="termin-zeit">' + zeit + ' Uhr</span>'
+              + '<span class="termin-sep"> · </span>'
+              + '<span class="termin-standort">' + (row.Standort || '') + '</span>'
+              + '</p>'
+              + '<p class="termin-adresse">' + (row.Adresse || '') + '</p>'
+              + '</div>'
+              + '</div>';
+          });
+
+          container.innerHTML = html;
+        },
+        error: function() {
+          var loading = document.getElementById('termine-loading');
+          loading.textContent = 'Termine konnten nicht geladen werden.';
+        }
+      });
+    })();
   </script>
 
   <!-- Main JS -->
