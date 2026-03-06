@@ -31,6 +31,10 @@ const { title, description = 'NAD.KAH Kreativarbeit – Dekorationen & Textilplo
           });
         }
       });
+      // Automatically open the modal when an invite token is in the URL
+      if (window.location.hash && window.location.hash.match(/#invite_token=/)) {
+        window.netlifyIdentity.open("invite");
+      }
     }
   </script>
 </body>
