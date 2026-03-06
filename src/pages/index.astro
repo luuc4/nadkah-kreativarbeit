@@ -1,0 +1,139 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import homepage from '../content/pages/homepage.json';
+
+const arbeitenRaw = await getCollection('arbeiten');
+const arbeiten = arbeitenRaw.sort((a, b) => a.data.order - b.data.order);
+
+const termineRaw = await getCollection('termine');
+const termine = termineRaw.sort((a, b) => a.data.datum.localeCompare(b.data.datum));
+
+function formatDate(dateStr: string): string {
+  const [y, m, d] = dateStr.split('-');
+  return `${d}.${m}.${y}`;
+}
+---
+<BaseLayout title="NAD.KAH – Kreativarbeit">
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#arbeiten">Arbeiten</a></li>
+      <li><a href="#kreativkopf">Kreativkopf</a></li>
+      <li><a href="#unterwegs">Unterwegs</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </nav>
+
+  <!-- Home -->
+  <section id="home" class="section hero">
+    <div class="hero-content">
+      <div class="logo-circle">
+        <span class="logo-top">nad.kah</span>
+        <span class="logo-bottom">kreativarbeit</span>
+      </div>
+      <p class="tagline">{homepage.tagline}</p>
+    </div>
+  </section>
+
+  <!-- Arbeiten -->
+  <section id="arbeiten" class="section">
+    <h2 class="section-title">Arbeiten</h2>
+    <div class="gallery">
+      {arbeiten.map((item) => (
+        <a href={`/detail/${item.id.replace(/\.md$/, '')}/`} class="gallery-item">
+          <img src={item.data.image} alt={item.data.imageAlt} loading="lazy" width="400" height="400">
+          <div class="gallery-overlay">
+            <span>{item.data.title}</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Kreativkopf -->
+  <section id="kreativkopf" class="section">
+    <h2 class="section-title">Kreativkopf</h2>
+    <div class="about-container">
+      <div class="about-image">
+        <div class="logo-circle logo-circle--small">
+          <span class="logo-top">nad.kah</span>
+          <span class="logo-bottom">kreativarbeit</span>
+        </div>
+      </div>
+      <div class="about-text">
+        <h3>{homepage.kreativkopfTitle}</h3>
+        <p>{homepage.kreativkopfText1}</p>
+        <p>{homepage.kreativkopfText2}</p>
+        <a href="https://www.instagram.com/nad.kah_kreativarbeit/" target="_blank" rel="noopener" class="insta-link">
+          <svg class="icon-insta" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+          @nad.kah_kreativarbeit
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Unterwegs -->
+  <section id="unterwegs" class="section">
+    <h2 class="section-title">Unterwegs</h2>
+    <p class="section-subtitle">Die nächsten Markttermine</p>
+    <div class="termine-container" id="termine-container">
+      {termine.length === 0 ? (
+        <p class="termine-loading">Aktuell sind keine Termine eingetragen.</p>
+      ) : (
+        termine.map((t) => (
+          <div class="termin-card">
+            <div class="termin-date">{formatDate(t.data.datum)}</div>
+            <div class="termin-details">
+              <h3 class="termin-name">{t.data.name}</h3>
+              <p class="termin-meta">
+                <span class="termin-zeit">{t.data.uhrzeitStart} – {t.data.uhrzeitEnde} Uhr</span>
+                <span class="termin-sep"> · </span>
+                <span class="termin-standort">{t.data.standort}</span>
+              </p>
+              <p class="termin-adresse">{t.data.adresse}</p>
+            </div>
+          </div>
+        ))
+      )}
+    </div>
+  </section>
+
+  <!-- Kontakt -->
+  <section id="kontakt" class="section">
+    <h2 class="section-title">Kontakt</h2>
+    <div class="contact-container">
+      <div class="contact-card">
+        <p class="contact-lead">{homepage.kontaktText}</p>
+        <a href="https://www.instagram.com/nad.kah_kreativarbeit/" target="_blank" rel="noopener" class="btn-insta">
+          <svg class="icon-insta" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+          Anfrage auf Instagram
+        </a>
+        <div class="contact-location">
+          <p>Feldkirch · Vorarlberg · Austria</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <p><a href="/impressum/">Impressum</a></p>
+      </div>
+      <div class="footer-col">
+        <p><a href="https://www.instagram.com/nad.kah_kreativarbeit/" target="_blank" rel="noopener">Instagram</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 NAD.KAH – Kreativarbeit</p>
+    </div>
+  </footer>
+
+</BaseLayout>

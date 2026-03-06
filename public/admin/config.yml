@@ -1,0 +1,48 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/img"
+public_folder: "/img"
+
+locale: "de"
+
+collections:
+  - name: "arbeiten"
+    label: "Arbeiten (Kategorien)"
+    folder: "src/content/arbeiten"
+    create: false
+    slug: "{{slug}}"
+    fields:
+      - { label: "Titel", name: "title", widget: "string" }
+      - { label: "Bild", name: "image", widget: "image" }
+      - { label: "Bild-Beschreibung", name: "imageAlt", widget: "string" }
+      - { label: "Reihenfolge", name: "order", widget: "number", value_type: "int" }
+      - { label: "Beschreibung", name: "body", widget: "markdown" }
+
+  - name: "termine"
+    label: "Markttermine"
+    folder: "src/content/termine"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Datum", name: "datum", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+      - { label: "Uhrzeit Start", name: "uhrzeitStart", widget: "string", hint: "Format: HH:MM (z.B. 09:00)" }
+      - { label: "Uhrzeit Ende", name: "uhrzeitEnde", widget: "string", hint: "Format: HH:MM (z.B. 17:00)" }
+      - { label: "Standort", name: "standort", widget: "string" }
+      - { label: "Adresse", name: "adresse", widget: "string" }
+
+  - name: "homepage"
+    label: "Startseite"
+    files:
+      - label: "Startseiten-Texte"
+        name: "homepage"
+        file: "src/content/pages/homepage.json"
+        fields:
+          - { label: "Tagline (Hero-Bereich)", name: "tagline", widget: "string" }
+          - { label: "Kreativkopf Titel", name: "kreativkopfTitle", widget: "string" }
+          - { label: "Kreativkopf Text 1", name: "kreativkopfText1", widget: "text" }
+          - { label: "Kreativkopf Text 2", name: "kreativkopfText2", widget: "text" }
+          - { label: "Kontakt Text", name: "kontaktText", widget: "text" }
