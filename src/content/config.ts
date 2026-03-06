@@ -25,6 +25,14 @@ const termine = defineCollection({
     standort: z.string(),
     adresse: z.string().optional().default(''),
     link: z.string().optional().default(''),
+    datum2: z.union([z.string(), z.date()]).optional().transform((val) => {
+      if (val instanceof Date) {
+        return val.toISOString().split('T')[0];
+      }
+      return val ?? '';
+    }),
+    uhrzeitStart2: z.string().optional().default(''),
+    uhrzeitEnde2: z.string().optional().default(''),
   }),
 });
 

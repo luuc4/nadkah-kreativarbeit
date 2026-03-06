@@ -7,15 +7,37 @@ const arbeitenRaw = await getCollection('arbeiten');
 const arbeiten = arbeitenRaw.sort((a, b) => a.data.order - b.data.order);
 
 const today = new Date().toISOString().split('T')[0];
+const todayMs = new Date(today).getTime();
 const termineRaw = await getCollection('termine');
 const termine = termineRaw
-  .filter((t) => t.data.datum >= today)
+  .filter((t) => {
+    const lastDay = t.data.datum2 || t.data.datum;
+    return lastDay >= today;
+  })
   .sort((a, b) => a.data.datum.localeCompare(b.data.datum));
+
+const wochentage = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+
+function getWochentag(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00');
+  return wochentage[d.getDay()];
+}
 
 function formatDate(dateStr: string): string {
   const [y, m, d] = dateStr.split('-');
-  return `${d}.${m}.${y}`;
+  return `${getWochentag(dateStr)}, ${d}.${m}.${y}`;
 }
+
+function getBadgeText(dateStr: string): string {
+  const diff = Math.ceil((new Date(dateStr + 'T00:00:00').getTime() - todayMs) / (1000 * 60 * 60 * 24));
+  if (diff < 0) return '';
+  if (diff === 0) return 'Heute';
+  if (diff === 1) return 'Morgen';
+  if (diff <= 28) return `in ${diff} Tagen`;
+  return '';
+}
+
+const nextBadge = termine.length > 0 ? getBadgeText(termine[0].data.datum) : '';
 ---
 <BaseLayout title="NAD.KAH – Kreativarbeit">
 
@@ -89,9 +111,13 @@ function formatDate(dateStr: string): string {
       {termine.length === 0 ? (
         <p class="termine-loading">Aktuell sind keine Termine eingetragen.</p>
       ) : (
-        termine.map((t) => (
-          <div class="termin-card">
-            <div class="termin-date">{formatDate(t.data.datum)}</div>
+        termine.map((t, i) => (
+          <div class={`termin-card${i === 0 && nextBadge ? ' termin-card--next' : ''}`}>
+            <div class="termin-date-col">
+              <div class="termin-date">{formatDate(t.data.datum)}</div>
+              {t.data.datum2 && <div class="termin-date">{formatDate(t.data.datum2)}</div>}
+              {i === 0 && nextBadge && <span class="termin-badge">{nextBadge}</span>}
+            </div>
             <div class="termin-details">
               <h3 class="termin-name">
                 {t.data.link ? (
@@ -105,6 +131,13 @@ function formatDate(dateStr: string): string {
                 <span class="termin-sep"> · </span>
                 <span class="termin-standort">{t.data.standort}</span>
               </p>
+              {t.data.datum2 && t.data.uhrzeitStart2 && t.data.uhrzeitEnde2 && (
+                <p class="termin-meta">
+                  <span class="termin-zeit">{t.data.uhrzeitStart2} – {t.data.uhrzeitEnde2} Uhr</span>
+                  <span class="termin-sep"> · </span>
+                  <span class="termin-standort">{t.data.standort}</span>
+                </p>
+              )}
               {t.data.adresse && <p class="termin-adresse">{t.data.adresse}</p>}
             </div>
           </div>

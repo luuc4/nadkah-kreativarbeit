@@ -320,14 +320,39 @@ img { display: block; max-width: 100%; height: auto; }
   border-color: #ccc;
 }
 
-.termin-date {
+.termin-date-col {
   flex-shrink: 0;
+  min-width: 130px;
+  padding-top: 0.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.termin-date {
   font-size: 0.8rem;
   font-weight: 400;
   letter-spacing: 0.08em;
   color: #888;
-  min-width: 90px;
-  padding-top: 0.15rem;
+}
+
+.termin-badge {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #5a7a3a;
+  background: #eef5e6;
+  border-radius: 20px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.termin-card--next {
+  border-color: #c8ddb0;
+  background: #fcfdf9;
 }
 
 .termin-details {
@@ -661,9 +686,12 @@ img { display: block; max-width: 100%; height: auto; }
     padding: 1.2rem 1.4rem;
   }
 
+  .termin-date-col {
+    min-width: auto;
+  }
+
   .termin-date {
     font-size: 0.75rem;
-    min-width: auto;
   }
 
   .section {
