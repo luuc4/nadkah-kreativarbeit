@@ -113,12 +113,7 @@ const nextBadge = termine.length > 0 ? getBadgeText(termine[0].data.datum) : '';
       ) : (
         termine.map((t, i) => (
           <div class={`termin-card${i === 0 && nextBadge ? ' termin-card--next' : ''}`}>
-            <div class="termin-date-col">
-              <div class="termin-date">{formatDate(t.data.datum)}</div>
-              {t.data.datum2 && <div class="termin-date">{formatDate(t.data.datum2)}</div>}
-              {i === 0 && nextBadge && <span class="termin-badge">{nextBadge}</span>}
-            </div>
-            <div class="termin-details">
+            <div class="termin-header">
               <h3 class="termin-name">
                 {t.data.link ? (
                   <a href={t.data.link} target="_blank" rel="noopener" class="termin-link">{t.data.name}</a>
@@ -126,20 +121,23 @@ const nextBadge = termine.length > 0 ? getBadgeText(termine[0].data.datum) : '';
                   t.data.name
                 )}
               </h3>
-              <p class="termin-meta">
-                <span class="termin-zeit">{t.data.uhrzeitStart} – {t.data.uhrzeitEnde} Uhr</span>
-                <span class="termin-sep"> · </span>
-                <span class="termin-standort">{t.data.standort}</span>
-              </p>
-              {t.data.datum2 && t.data.uhrzeitStart2 && t.data.uhrzeitEnde2 && (
-                <p class="termin-meta">
-                  <span class="termin-zeit">{t.data.uhrzeitStart2} – {t.data.uhrzeitEnde2} Uhr</span>
-                  <span class="termin-sep"> · </span>
-                  <span class="termin-standort">{t.data.standort}</span>
-                </p>
-              )}
-              {t.data.adresse && <p class="termin-adresse">{t.data.adresse}</p>}
+              {i === 0 && nextBadge && <span class="termin-badge">{nextBadge}</span>}
             </div>
+            <div class="termin-schedule">
+              <div class="termin-day">
+                <span class="termin-date">{formatDate(t.data.datum)}</span>
+                <span class="termin-zeit">{t.data.uhrzeitStart} – {t.data.uhrzeitEnde} Uhr</span>
+              </div>
+              {t.data.datum2 && t.data.uhrzeitStart2 && t.data.uhrzeitEnde2 && (
+                <div class="termin-day">
+                  <span class="termin-date">{formatDate(t.data.datum2)}</span>
+                  <span class="termin-zeit">{t.data.uhrzeitStart2} – {t.data.uhrzeitEnde2} Uhr</span>
+                </div>
+              )}
+            </div>
+            <p class="termin-ort">
+              {t.data.standort}{t.data.adresse && ` · ${t.data.adresse}`}
+            </p>
           </div>
         ))
       )}

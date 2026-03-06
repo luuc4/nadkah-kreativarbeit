@@ -307,47 +307,14 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 .termin-card {
-  display: flex;
-  gap: 1.8rem;
   padding: 1.5rem 1.8rem;
   border: 1px solid #eee;
   border-radius: 6px;
   transition: border-color 0.3s;
-  align-items: flex-start;
 }
 
 .termin-card:hover {
   border-color: #ccc;
-}
-
-.termin-date-col {
-  flex-shrink: 0;
-  min-width: 130px;
-  padding-top: 0.15rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.termin-date {
-  font-size: 0.8rem;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  color: #888;
-}
-
-.termin-badge {
-  display: inline-block;
-  margin-top: 0.5rem;
-  padding: 0.2rem 0.7rem;
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: #5a7a3a;
-  background: #eef5e6;
-  border-radius: 20px;
-  white-space: nowrap;
-  width: fit-content;
 }
 
 .termin-card--next {
@@ -355,33 +322,58 @@ img { display: block; max-width: 100%; height: auto; }
   background: #fcfdf9;
 }
 
-.termin-details {
-  flex: 1;
-  min-width: 0;
+.termin-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+  flex-wrap: wrap;
 }
 
 .termin-name {
   font-weight: 400;
   font-size: 1.05rem;
   color: #222;
-  margin-bottom: 0.4rem;
 }
 
-.termin-meta {
+.termin-badge {
+  padding: 0.15rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #5a7a3a;
+  background: #eef5e6;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.termin-schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.6rem;
+}
+
+.termin-day {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   font-size: 0.85rem;
   color: #666;
-  margin-bottom: 0.3rem;
+}
+
+.termin-date {
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: #888;
+  min-width: 130px;
 }
 
 .termin-zeit {
   white-space: nowrap;
 }
 
-.termin-sep {
-  color: #ccc;
-}
-
-.termin-adresse {
+.termin-ort {
   font-size: 0.8rem;
   color: #999;
 }
@@ -681,17 +673,22 @@ img { display: block; max-width: 100%; height: auto; }
   }
 
   .termin-card {
-    flex-direction: column;
-    gap: 0.6rem;
     padding: 1.2rem 1.4rem;
   }
 
-  .termin-date-col {
-    min-width: auto;
+  .termin-day {
+    flex-direction: column;
+    gap: 0.15rem;
+    align-items: flex-start;
+  }
+
+  .termin-day + .termin-day {
+    margin-top: 0.3rem;
   }
 
   .termin-date {
     font-size: 0.75rem;
+    min-width: auto;
   }
 
   .section {

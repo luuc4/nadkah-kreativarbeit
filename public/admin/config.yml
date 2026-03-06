@@ -29,15 +29,15 @@ collections:
     slug: "{{slug}}"
     fields:
       - { label: "Name", name: "name", widget: "string" }
-      - { label: "Datum", name: "datum", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
-      - { label: "Uhrzeit Start", name: "uhrzeitStart", widget: "string", hint: "Format: HH:MM (z.B. 09:00)" }
-      - { label: "Uhrzeit Ende", name: "uhrzeitEnde", widget: "string", hint: "Format: HH:MM (z.B. 17:00)" }
-      - { label: "Standort", name: "standort", widget: "string" }
-      - { label: "Adresse", name: "adresse", widget: "string", required: false }
-      - { label: "Link (z.B. zur Markt-Webseite)", name: "link", widget: "string", required: false }
+      - { label: "Datum (1. Tag)", name: "datum", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+      - { label: "Uhrzeit Start (1. Tag)", name: "uhrzeitStart", widget: "string", hint: "Format: HH:MM (z.B. 09:00)" }
+      - { label: "Uhrzeit Ende (1. Tag)", name: "uhrzeitEnde", widget: "string", hint: "Format: HH:MM (z.B. 17:00)" }
       - { label: "2. Tag – Datum", name: "datum2", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", required: false }
       - { label: "2. Tag – Uhrzeit Start", name: "uhrzeitStart2", widget: "string", hint: "Format: HH:MM (z.B. 09:00)", required: false }
       - { label: "2. Tag – Uhrzeit Ende", name: "uhrzeitEnde2", widget: "string", hint: "Format: HH:MM (z.B. 14:00)", required: false }
+      - { label: "Standort", name: "standort", widget: "string" }
+      - { label: "Adresse", name: "adresse", widget: "string", required: false }
+      - { label: "Link (z.B. zur Markt-Webseite)", name: "link", widget: "string", required: false }
 
   - name: "homepage"
     label: "Startseite"
