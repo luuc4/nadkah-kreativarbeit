@@ -390,6 +390,28 @@ img { display: block; max-width: 100%; height: auto; }
   line-height: 1.5;
 }
 
+.impressum-section ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0.5rem;
+}
+
+.impressum-section ul li {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.7;
+  padding-left: 1.2rem;
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.impressum-section ul li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: #bbb;
+}
+
 .impressum-section h3 {
   font-weight: 400;
   font-size: 0.8rem;
@@ -530,7 +552,7 @@ img { display: block; max-width: 100%; height: auto; }
 .footer {
   background: #fafafa;
   border-top: 1px solid #eee;
-  padding: 3rem 2rem 1.5rem;
+  padding: 2.5rem 2rem 1.5rem;
   margin-top: 2rem;
 }
 
@@ -539,37 +561,30 @@ img { display: block; max-width: 100%; height: auto; }
   margin: 0 auto;
   display: flex;
   justify-content: center;
-  gap: 3rem;
 }
 
-.footer-col h4 {
-  font-weight: 400;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: #999;
-  margin-bottom: 0.8rem;
+.footer-links {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.footer-col p {
+.footer-links a {
   font-size: 0.85rem;
   color: #666;
-  line-height: 1.7;
-}
-
-.footer-col a {
-  color: #666;
+  letter-spacing: 0.05em;
   transition: color 0.3s;
 }
 
-.footer-col a:hover {
+.footer-links a:hover {
   color: #333;
 }
 
 .footer-bottom {
   text-align: center;
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1.2rem;
   border-top: 1px solid #eee;
 }
 
@@ -621,10 +636,9 @@ img { display: block; max-width: 100%; height: auto; }
     gap: 2rem;
   }
 
-  .footer-inner {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+  /* Gallery overlay always visible on touch devices */
+  .gallery-overlay {
+    opacity: 1;
   }
 
   .termin-card {
