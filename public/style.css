@@ -106,7 +106,6 @@ img { display: block; max-width: 100%; height: auto; }
 
 /* ===== Sections ===== */
 .section {
-  min-height: 100vh;
   padding: 100px 2rem 4rem;
   max-width: 1100px;
   margin: 0 auto;
@@ -129,6 +128,23 @@ img { display: block; max-width: 100%; height: auto; }
   margin-bottom: 2.5rem;
 }
 
+/* ===== Scroll Fade-in ===== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== Body scroll lock for mobile menu ===== */
+body.menu-open {
+  overflow: hidden;
+}
+
 /* ===== Hero ===== */
 .hero {
   display: flex;
@@ -137,6 +153,7 @@ img { display: block; max-width: 100%; height: auto; }
   text-align: center;
   min-height: 100vh;
   padding-top: 60px;
+  position: relative;
 }
 
 .hero-content {
@@ -144,6 +161,30 @@ img { display: block; max-width: 100%; height: auto; }
   flex-direction: column;
   align-items: center;
   gap: 2rem;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  color: #bbb;
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+.scroll-indicator svg {
+  width: 20px;
+  height: 20px;
+  stroke: #bbb;
+}
+
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+  50% { transform: translateX(-50%) translateY(8px); opacity: 0.5; }
 }
 
 .logo-circle {
@@ -307,58 +348,87 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 .termin-card {
-  display: flex;
-  gap: 1.8rem;
   padding: 1.5rem 1.8rem;
   border: 1px solid #eee;
   border-radius: 6px;
   transition: border-color 0.3s;
-  align-items: flex-start;
 }
 
 .termin-card:hover {
   border-color: #ccc;
 }
 
-.termin-date {
-  flex-shrink: 0;
-  font-size: 0.8rem;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  color: #888;
-  min-width: 90px;
-  padding-top: 0.15rem;
+.termin-card--next {
+  border-color: #c8ddb0;
+  background: #fcfdf9;
 }
 
-.termin-details {
-  flex: 1;
-  min-width: 0;
+.termin-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+  flex-wrap: wrap;
 }
 
 .termin-name {
   font-weight: 400;
   font-size: 1.05rem;
   color: #222;
-  margin-bottom: 0.4rem;
 }
 
-.termin-meta {
+.termin-badge {
+  padding: 0.15rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #5a7a3a;
+  background: #eef5e6;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.termin-schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.6rem;
+}
+
+.termin-day {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   font-size: 0.85rem;
   color: #666;
-  margin-bottom: 0.3rem;
+}
+
+.termin-date {
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: #888;
+  min-width: 130px;
 }
 
 .termin-zeit {
   white-space: nowrap;
 }
 
-.termin-sep {
-  color: #ccc;
-}
-
-.termin-adresse {
+.termin-ort {
   font-size: 0.8rem;
   color: #999;
+}
+
+.termin-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: #ccc;
+  transition: text-decoration-color 0.3s;
+}
+
+.termin-link:hover {
+  text-decoration-color: #333;
 }
 
 /* ===== Impressum Page ===== */
@@ -376,6 +446,8 @@ img { display: block; max-width: 100%; height: auto; }
   text-transform: uppercase;
   margin-bottom: 2.5rem;
   color: #222;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .impressum-section {
@@ -388,6 +460,28 @@ img { display: block; max-width: 100%; height: auto; }
   color: #555;
   margin-bottom: 1rem;
   line-height: 1.5;
+}
+
+.impressum-section ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0.5rem;
+}
+
+.impressum-section ul li {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.7;
+  padding-left: 1.2rem;
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.impressum-section ul li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: #bbb;
 }
 
 .impressum-section h3 {
@@ -430,6 +524,55 @@ img { display: block; max-width: 100%; height: auto; }
 
 .detail-back:hover {
   color: #333;
+}
+
+/* ===== Detail Page ===== */
+.detail-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 100px 2rem 4rem;
+  min-height: 100vh;
+}
+
+.detail-img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  background: #f5f5f5;
+  margin-bottom: 2rem;
+}
+
+.detail-title {
+  font-weight: 300;
+  font-size: 1.6rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.detail-content p {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+.detail-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.8rem;
+  border: 1.5px solid #333;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #333;
+  transition: background 0.3s, color 0.3s;
+  margin-top: 1rem;
+}
+
+.detail-cta:hover {
+  background: #333;
+  color: #fff;
 }
 
 /* ===== Kontakt ===== */
@@ -481,7 +624,7 @@ img { display: block; max-width: 100%; height: auto; }
 .footer {
   background: #fafafa;
   border-top: 1px solid #eee;
-  padding: 3rem 2rem 1.5rem;
+  padding: 2.5rem 2rem 1.5rem;
   margin-top: 2rem;
 }
 
@@ -490,37 +633,30 @@ img { display: block; max-width: 100%; height: auto; }
   margin: 0 auto;
   display: flex;
   justify-content: center;
-  gap: 3rem;
 }
 
-.footer-col h4 {
-  font-weight: 400;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: #999;
-  margin-bottom: 0.8rem;
+.footer-links {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.footer-col p {
+.footer-links a {
   font-size: 0.85rem;
   color: #666;
-  line-height: 1.7;
-}
-
-.footer-col a {
-  color: #666;
+  letter-spacing: 0.05em;
   transition: color 0.3s;
 }
 
-.footer-col a:hover {
+.footer-links a:hover {
   color: #333;
 }
 
 .footer-bottom {
   text-align: center;
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1.2rem;
   border-top: 1px solid #eee;
 }
 
@@ -572,16 +708,23 @@ img { display: block; max-width: 100%; height: auto; }
     gap: 2rem;
   }
 
-  .footer-inner {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+  /* Gallery overlay always visible on touch devices */
+  .gallery-overlay {
+    opacity: 1;
   }
 
   .termin-card {
-    flex-direction: column;
-    gap: 0.6rem;
     padding: 1.2rem 1.4rem;
+  }
+
+  .termin-day {
+    flex-direction: column;
+    gap: 0.15rem;
+    align-items: flex-start;
+  }
+
+  .termin-day + .termin-day {
+    margin-top: 0.3rem;
   }
 
   .termin-date {

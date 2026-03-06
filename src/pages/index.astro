@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+import homepage from '../content/pages/homepage.json';
+
+const arbeitenRaw = await getCollection('arbeiten');
+const arbeiten = arbeitenRaw.sort((a, b) => a.data.order - b.data.order);
+
+const today = new Date().toISOString().split('T')[0];
+const todayMs = new Date(today).getTime();
+const termineRaw = await getCollection('termine');
+const termine = termineRaw
+  .filter((t) => {
+    const lastDay = t.data.datum2 || t.data.datum;
+    return lastDay >= today;
+  })
+  .sort((a, b) => a.data.datum.localeCompare(b.data.datum));
+
+const wochentage = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+
+function getWochentag(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00');
+  return wochentage[d.getDay()];
+}
+
+function formatDate(dateStr: string): string {
+  const [y, m, d] = dateStr.split('-');
+  return `${getWochentag(dateStr)}, ${d}.${m}.${y}`;
+}
+
+function getBadgeText(dateStr: string): string {
+  const diff = Math.ceil((new Date(dateStr + 'T00:00:00').getTime() - todayMs) / (1000 * 60 * 60 * 24));
+  if (diff < 0) return '';
+  if (diff === 0) return 'Heute';
+  if (diff === 1) return 'Morgen';
+  if (diff <= 28) return `in ${diff} Tagen`;
+  return '';
+}
+
+const nextBadge = termine.length > 0 ? getBadgeText(termine[0].data.datum) : '';
+---
+<BaseLayout title="NAD.KAH – Kreativarbeit">
+
+  <Navbar active="home" />
+
+  <!-- Home -->
+  <section id="home" class="section hero">
+    <div class="hero-content">
+      <div class="logo-circle">
+        <span class="logo-top">nad.kah</span>
+        <span class="logo-bottom">kreativarbeit</span>
+      </div>
+      <p class="tagline">{homepage.tagline}</p>
+    </div>
+    <a href="#arbeiten" class="scroll-indicator" aria-label="Nach unten scrollen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </a>
+  </section>
+
+  <!-- Arbeiten -->
+  <section id="arbeiten" class="section fade-in">
+    <h2 class="section-title">Arbeiten</h2>
+    <div class="gallery">
+      {arbeiten.map((item) => (
+        <a href={`/detail/${item.id.replace(/\.md$/, '')}/`} class="gallery-item">
+          <img src={item.data.image} alt={item.data.imageAlt} loading="lazy" width="400" height="400">
+          <div class="gallery-overlay">
+            <span>{item.data.title}</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Kreativkopf -->
+  <section id="kreativkopf" class="section fade-in">
+    <h2 class="section-title">Kreativkopf</h2>
+    <div class="about-container">
+      <div class="about-image">
+        <div class="logo-circle logo-circle--small">
+          <span class="logo-top">nad.kah</span>
+          <span class="logo-bottom">kreativarbeit</span>
+        </div>
+      </div>
+      <div class="about-text">
+        <h3>{homepage.kreativkopfTitle}</h3>
+        <p>{homepage.kreativkopfText1}</p>
+        <p>{homepage.kreativkopfText2}</p>
+        <a href="https://www.instagram.com/nad.kah_kreativarbeit/" target="_blank" rel="noopener" class="insta-link">
+          <svg class="icon-insta" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+          @nad.kah_kreativarbeit
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Unterwegs -->
+  <section id="unterwegs" class="section fade-in">
+    <h2 class="section-title">Unterwegs</h2>
+    <p class="section-subtitle">Die nächsten Markttermine</p>
+    <div class="termine-container" id="termine-container">
+      {termine.length === 0 ? (
+        <p class="termine-loading">Aktuell sind keine Termine eingetragen.</p>
+      ) : (
+        termine.map((t, i) => (
+          <div class={`termin-card${i === 0 && nextBadge ? ' termin-card--next' : ''}`}>
+            <div class="termin-header">
+              <h3 class="termin-name">
+                {t.data.link ? (
+                  <a href={t.data.link} target="_blank" rel="noopener" class="termin-link">{t.data.name}</a>
+                ) : (
+                  t.data.name
+                )}
+              </h3>
+              {i === 0 && nextBadge && <span class="termin-badge">{nextBadge}</span>}
+            </div>
+            <div class="termin-schedule">
+              <div class="termin-day">
+                <span class="termin-date">{formatDate(t.data.datum)}</span>
+                <span class="termin-zeit">{t.data.uhrzeitStart} – {t.data.uhrzeitEnde} Uhr</span>
+              </div>
+              {t.data.datum2 && t.data.uhrzeitStart2 && t.data.uhrzeitEnde2 && (
+                <div class="termin-day">
+                  <span class="termin-date">{formatDate(t.data.datum2)}</span>
+                  <span class="termin-zeit">{t.data.uhrzeitStart2} – {t.data.uhrzeitEnde2} Uhr</span>
+                </div>
+              )}
+            </div>
+            <p class="termin-ort">
+              {t.data.standort}{t.data.adresse && ` · ${t.data.adresse}`}
+            </p>
+          </div>
+        ))
+      )}
+    </div>
+  </section>
+
+  <!-- Kontakt -->
+  <section id="kontakt" class="section fade-in">
+    <h2 class="section-title">Kontakt</h2>
+    <div class="contact-container">
+      <div class="contact-card">
+        <p class="contact-lead">{homepage.kontaktText}</p>
+        <a href="https://www.instagram.com/nad.kah_kreativarbeit/" target="_blank" rel="noopener" class="btn-insta">
+          <svg class="icon-insta" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+          Anfrage auf Instagram
+        </a>
+        <div class="contact-location">
+          <p>Feldkirch · Vorarlberg · Austria</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+
+</BaseLayout>

@@ -1,0 +1,21 @@
+{
+  "name": "nadkah-kreativarbeit",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:17785/git/luuc4/nadkah-kreativarbeit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@astrojs/node": "^9.5.4",
+    "astro": "^5.18.0"
+  }
+}
