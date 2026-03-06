@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
 import { getCollection } from 'astro:content';
 import homepage from '../content/pages/homepage.json';
 
@@ -41,19 +43,7 @@ const nextBadge = termine.length > 0 ? getBadgeText(termine[0].data.datum) : '';
 ---
 <BaseLayout title="NAD.KAH – Kreativarbeit">
 
-  <!-- Navbar -->
-  <nav class="navbar" id="navbar">
-    <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="#home" class="active">Home</a></li>
-      <li><a href="#arbeiten">Arbeiten</a></li>
-      <li><a href="#kreativkopf">Kreativkopf</a></li>
-      <li><a href="#unterwegs">Unterwegs</a></li>
-      <li><a href="#kontakt">Kontakt</a></li>
-    </ul>
-  </nav>
+  <Navbar active="home" />
 
   <!-- Home -->
   <section id="home" class="section hero">
@@ -64,10 +54,13 @@ const nextBadge = termine.length > 0 ? getBadgeText(termine[0].data.datum) : '';
       </div>
       <p class="tagline">{homepage.tagline}</p>
     </div>
+    <a href="#arbeiten" class="scroll-indicator" aria-label="Nach unten scrollen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </a>
   </section>
 
   <!-- Arbeiten -->
-  <section id="arbeiten" class="section">
+  <section id="arbeiten" class="section fade-in">
     <h2 class="section-title">Arbeiten</h2>
     <div class="gallery">
       {arbeiten.map((item) => (
@@ -82,7 +75,7 @@ const nextBadge = termine.length > 0 ? getBadgeText(termine[0].data.datum) : '';
   </section>
 
   <!-- Kreativkopf -->
-  <section id="kreativkopf" class="section">
+  <section id="kreativkopf" class="section fade-in">
     <h2 class="section-title">Kreativkopf</h2>
     <div class="about-container">
       <div class="about-image">
@@ -104,7 +97,7 @@ const nextBadge = termine.length > 0 ? getBadgeText(termine[0].data.datum) : '';
   </section>
 
   <!-- Unterwegs -->
-  <section id="unterwegs" class="section">
+  <section id="unterwegs" class="section fade-in">
     <h2 class="section-title">Unterwegs</h2>
     <p class="section-subtitle">Die nächsten Markttermine</p>
     <div class="termine-container" id="termine-container">
@@ -145,7 +138,7 @@ const nextBadge = termine.length > 0 ? getBadgeText(termine[0].data.datum) : '';
   </section>
 
   <!-- Kontakt -->
-  <section id="kontakt" class="section">
+  <section id="kontakt" class="section fade-in">
     <h2 class="section-title">Kontakt</h2>
     <div class="contact-container">
       <div class="contact-card">
@@ -161,18 +154,6 @@ const nextBadge = termine.length > 0 ? getBadgeText(termine[0].data.datum) : '';
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-links">
-        <a href="/impressum/">Impressum</a>
-        <a href="/datenschutz/">Datenschutz</a>
-        <a href="https://www.instagram.com/nad.kah_kreativarbeit/" target="_blank" rel="noopener">Instagram</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 NAD.KAH – Kreativarbeit</p>
-    </div>
-  </footer>
+  <Footer />
 
 </BaseLayout>

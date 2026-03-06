@@ -1,0 +1,21 @@
+---
+interface Props {
+  active?: string;
+  subpage?: boolean;
+}
+
+const { active, subpage = false } = Astro.props;
+const prefix = subpage ? '/' : '';
+---
+<nav class="navbar" id="navbar">
+  <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href={`${prefix}#home`} class={active === 'home' ? 'active' : ''}>Home</a></li>
+    <li><a href={`${prefix}#arbeiten`} class={active === 'arbeiten' ? 'active' : ''}>Arbeiten</a></li>
+    <li><a href={`${prefix}#kreativkopf`} class={active === 'kreativkopf' ? 'active' : ''}>Kreativkopf</a></li>
+    <li><a href={`${prefix}#unterwegs`} class={active === 'unterwegs' ? 'active' : ''}>Unterwegs</a></li>
+    <li><a href={`${prefix}#kontakt`} class={active === 'kontakt' ? 'active' : ''}>Kontakt</a></li>
+  </ul>
+</nav>

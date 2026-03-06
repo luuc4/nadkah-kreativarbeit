@@ -1,20 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
 ---
 <BaseLayout title="Impressum – NAD.KAH Kreativarbeit">
 
-  <nav class="navbar">
-    <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="/#home">Home</a></li>
-      <li><a href="/#arbeiten">Arbeiten</a></li>
-      <li><a href="/#kreativkopf">Kreativkopf</a></li>
-      <li><a href="/#unterwegs">Unterwegs</a></li>
-      <li><a href="/#kontakt">Kontakt</a></li>
-    </ul>
-  </nav>
+  <Navbar subpage />
 
   <div class="impressum-page">
     <a href="/" class="detail-back">&larr; Zurück zur Startseite</a>
@@ -91,17 +82,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
   </div>
 
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-links">
-        <a href="/impressum/">Impressum</a>
-        <a href="/datenschutz/">Datenschutz</a>
-        <a href="https://www.instagram.com/nad.kah_kreativarbeit/" target="_blank" rel="noopener">Instagram</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 NAD.KAH – Kreativarbeit</p>
-    </div>
-  </footer>
+  <Footer />
 
 </BaseLayout>
