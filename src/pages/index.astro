@@ -6,8 +6,11 @@ import homepage from '../content/pages/homepage.json';
 const arbeitenRaw = await getCollection('arbeiten');
 const arbeiten = arbeitenRaw.sort((a, b) => a.data.order - b.data.order);
 
+const today = new Date().toISOString().split('T')[0];
 const termineRaw = await getCollection('termine');
-const termine = termineRaw.sort((a, b) => a.data.datum.localeCompare(b.data.datum));
+const termine = termineRaw
+  .filter((t) => t.data.datum >= today)
+  .sort((a, b) => a.data.datum.localeCompare(b.data.datum));
 
 function formatDate(dateStr: string): string {
   const [y, m, d] = dateStr.split('-');
@@ -90,13 +93,19 @@ function formatDate(dateStr: string): string {
           <div class="termin-card">
             <div class="termin-date">{formatDate(t.data.datum)}</div>
             <div class="termin-details">
-              <h3 class="termin-name">{t.data.name}</h3>
+              <h3 class="termin-name">
+                {t.data.link ? (
+                  <a href={t.data.link} target="_blank" rel="noopener" class="termin-link">{t.data.name}</a>
+                ) : (
+                  t.data.name
+                )}
+              </h3>
               <p class="termin-meta">
                 <span class="termin-zeit">{t.data.uhrzeitStart} – {t.data.uhrzeitEnde} Uhr</span>
                 <span class="termin-sep"> · </span>
                 <span class="termin-standort">{t.data.standort}</span>
               </p>
-              <p class="termin-adresse">{t.data.adresse}</p>
+              {t.data.adresse && <p class="termin-adresse">{t.data.adresse}</p>}
             </div>
           </div>
         ))

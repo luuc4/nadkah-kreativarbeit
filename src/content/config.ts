@@ -23,7 +23,8 @@ const termine = defineCollection({
     uhrzeitEnde: z.string(),
     name: z.string(),
     standort: z.string(),
-    adresse: z.string(),
+    adresse: z.string().optional().default(''),
+    link: z.string().optional().default(''),
   }),
 });
 

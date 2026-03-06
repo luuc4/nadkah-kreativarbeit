@@ -33,7 +33,8 @@ collections:
       - { label: "Uhrzeit Start", name: "uhrzeitStart", widget: "string", hint: "Format: HH:MM (z.B. 09:00)" }
       - { label: "Uhrzeit Ende", name: "uhrzeitEnde", widget: "string", hint: "Format: HH:MM (z.B. 17:00)" }
       - { label: "Standort", name: "standort", widget: "string" }
-      - { label: "Adresse", name: "adresse", widget: "string" }
+      - { label: "Adresse", name: "adresse", widget: "string", required: false }
+      - { label: "Link (z.B. zur Markt-Webseite)", name: "link", widget: "string", required: false }
 
   - name: "homepage"
     label: "Startseite"
