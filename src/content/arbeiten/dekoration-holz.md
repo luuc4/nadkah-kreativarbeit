@@ -1,7 +1,7 @@
 ---
-title: "Holzdekoration"
-image: "/img/placeholder-1.svg"
-imageAlt: "Holzdekoration"
+title: Holzdekorationn
+image: /img/placeholder-1.svg
+imageAlt: Holzdekoration
 order: 1
 ---
 
