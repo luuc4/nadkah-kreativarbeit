@@ -13,7 +13,12 @@ const arbeiten = defineCollection({
 const termine = defineCollection({
   type: 'content',
   schema: z.object({
-    datum: z.coerce.string(),
+    datum: z.union([z.string(), z.date()]).transform((val) => {
+      if (val instanceof Date) {
+        return val.toISOString().split('T')[0];
+      }
+      return val;
+    }),
     uhrzeitStart: z.string(),
     uhrzeitEnde: z.string(),
     name: z.string(),
