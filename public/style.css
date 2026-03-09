@@ -34,6 +34,11 @@ img { display: block; max-width: 100%; height: auto; }
   -webkit-backdrop-filter: blur(8px);
   z-index: 1000;
   border-bottom: 1px solid #eee;
+  transition: box-shadow 0.3s ease;
+}
+
+.navbar.scrolled {
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
 }
 
 .nav-links {
@@ -161,6 +166,14 @@ body.menu-open {
   flex-direction: column;
   align-items: center;
   gap: 2rem;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.hero-content.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .scroll-indicator {
@@ -174,12 +187,18 @@ body.menu-open {
   gap: 0.4rem;
   color: #bbb;
   animation: scroll-bounce 2s ease-in-out infinite;
+  transition: opacity 0.4s ease;
 }
 
 .scroll-indicator svg {
   width: 20px;
   height: 20px;
   stroke: #bbb;
+}
+
+.scroll-indicator.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 @keyframes scroll-bounce {
@@ -249,6 +268,7 @@ body.menu-open {
   aspect-ratio: 1 / 1;
   background: #f5f5f5;
   display: block;
+  border-radius: 6px;
 }
 
 .gallery-item img {
@@ -351,11 +371,12 @@ body.menu-open {
   padding: 1.5rem 1.8rem;
   border: 1px solid #eee;
   border-radius: 6px;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .termin-card:hover {
-  border-color: #ccc;
+  border-color: #ddd;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
 }
 
 .termin-card--next {
@@ -519,11 +540,12 @@ body.menu-open {
   text-transform: uppercase;
   color: #888;
   margin-bottom: 2rem;
-  transition: color 0.3s;
+  transition: color 0.3s, transform 0.3s;
 }
 
 .detail-back:hover {
   color: #333;
+  transform: translateX(-3px);
 }
 
 /* ===== Detail Page ===== */
@@ -540,6 +562,7 @@ body.menu-open {
   object-fit: cover;
   background: #f5f5f5;
   margin-bottom: 2rem;
+  border-radius: 6px;
 }
 
 .detail-title {
@@ -562,6 +585,7 @@ body.menu-open {
   gap: 0.5rem;
   padding: 0.7rem 1.8rem;
   border: 1.5px solid #333;
+  border-radius: 4px;
   font-size: 0.8rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -600,6 +624,7 @@ body.menu-open {
   gap: 0.6rem;
   padding: 0.8rem 2rem;
   border: 1.5px solid #333;
+  border-radius: 4px;
   font-size: 0.85rem;
   font-weight: 400;
   letter-spacing: 0.1em;
@@ -647,10 +672,26 @@ body.menu-open {
   color: #666;
   letter-spacing: 0.05em;
   transition: color 0.3s;
+  position: relative;
+}
+
+.footer-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #333;
+  transition: width 0.3s;
 }
 
 .footer-links a:hover {
   color: #333;
+}
+
+.footer-links a:hover::after {
+  width: 100%;
 }
 
 .footer-bottom {
