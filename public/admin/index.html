@@ -5,8 +5,107 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NAD.KAH CMS</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    #deploy-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #2a2a2a;
+      color: white;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 99999;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+    }
+    #deploy-banner .deploy-info {
+      color: #ccc;
+    }
+    #deploy-btn {
+      background: #4a9c5b;
+      color: white;
+      border: none;
+      padding: 10px 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    #deploy-btn:hover {
+      background: #3d8a4e;
+    }
+    #deploy-btn:disabled {
+      background: #666;
+      cursor: not-allowed;
+    }
+    #deploy-status {
+      margin-left: 16px;
+      font-size: 13px;
+    }
+    /* Push CMS content up so deploy bar doesn't overlap */
+    body {
+      padding-bottom: 60px;
+    }
+  </style>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+  <div id="deploy-banner">
+    <span class="deploy-info">Änderungen werden erst nach Veröffentlichung auf der Website sichtbar.</span>
+    <div style="display:flex;align-items:center;">
+      <button id="deploy-btn" onclick="triggerDeploy()">Veröffentlichen</button>
+      <span id="deploy-status"></span>
+    </div>
+  </div>
+
+  <script>
+    // Netlify Build Hook URL
+    // ANLEITUNG: Ersetze die URL unten mit deinem eigenen Build Hook.
+    // Erstelle ihn in Netlify unter: Site settings > Build & deploy > Build hooks
+    var NETLIFY_BUILD_HOOK = '';
+
+    function triggerDeploy() {
+      var btn = document.getElementById('deploy-btn');
+      var status = document.getElementById('deploy-status');
+
+      if (!NETLIFY_BUILD_HOOK) {
+        status.style.color = '#ff6b6b';
+        status.textContent = 'Build Hook URL fehlt! Siehe Anleitung in index.html.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Wird veröffentlicht...';
+      status.style.color = '#ccc';
+      status.textContent = '';
+
+      fetch(NETLIFY_BUILD_HOOK, { method: 'POST' })
+        .then(function(response) {
+          if (response.ok) {
+            status.style.color = '#4a9c5b';
+            status.textContent = 'Deploy gestartet! Die Seite wird in ca. 1-2 Minuten aktualisiert.';
+            btn.textContent = 'Gestartet ✓';
+            setTimeout(function() {
+              btn.disabled = false;
+              btn.textContent = 'Veröffentlichen';
+            }, 30000);
+          } else {
+            throw new Error('Status ' + response.status);
+          }
+        })
+        .catch(function(err) {
+          status.style.color = '#ff6b6b';
+          status.textContent = 'Fehler: ' + err.message;
+          btn.disabled = false;
+          btn.textContent = 'Veröffentlichen';
+        });
+    }
+  </script>
 </body>
 </html>
